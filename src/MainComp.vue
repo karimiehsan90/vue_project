@@ -1,5 +1,5 @@
 <template>
-
+    <div></div>
 </template>
 
 <script>
@@ -20,6 +20,9 @@
             }
             else if (role == 'manager'){
                 this.$router.push('/panel/manager/all-cases')
+            }
+            else {
+                this.$router.push('/sign-in')
             }
         }
     }
