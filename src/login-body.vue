@@ -66,7 +66,7 @@
                         localStorage.setItem("token", data.data.token);
                         localStorage.setItem("role", data.data.role);
                         localStorage.setItem("name", data.data.name);
-                        vm.$router.push('/panel/manager/cases-to-me');
+                        vm.$router.push('/');
                     }
                 });
             }

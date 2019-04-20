@@ -10,6 +10,7 @@ import DoingComp from '../DoingComp.vue'
 import AllCases from '../AllCases.vue'
 import UsersComp from '../UsersComp.vue'
 import ReportComp from '../ReportComp.vue'
+import MainComp from '../MainComp.vue'
 
 
 Vue.use(Router);
@@ -17,7 +18,7 @@ Vue.use(Router);
 const router = new Router({routes: [
     {
         path: '/',
-        redirect: '/sign-in'
+        component: MainComp
     },
     {
         path: '/sign-in',
