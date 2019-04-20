@@ -1,0 +1,81 @@
+:root {
+  --white-drak: #C6C6C6;
+  --background-icon-green: #3c9445;
+  --height-entrance: 400px;
+
+  --shadow: #2A3132;
+  --shadow-hover: #3e4647;
+  --mist: #90AFC5;
+  --stone: #336B87;
+  --autmn-foliage: #763626;
+
+  --dark-white: #d7d7d7;
+  --d6 : #d6d6d6;
+}
+
+@font-face {
+  font-family: 'IranSans';
+  src: url('http://localhost/api/IRANSans.ttf');
+}
+
+.bg-navbar {
+  background: var(--shadow);
+}
+
+.nav-item-1 {
+
+  color: var(--mist);
+  font-weight: bolder;
+  text-align: center;
+  list-style-type: none;
+  height: 100%;
+  justify-content: center;
+}
+
+#item3{
+  margin-right: 10px;
+}
+
+.nav-item-1:hover {
+  background-color: var(--shadow-hover);
+}
+
+.brand-navbar{
+  color: var(--mist);
+  font-weight: bolder;
+}
+
+.nav-item-1-active {
+  background-color: var(--shadow-hover);
+}
+
+.link-nav :hover{
+  background-color: white;
+}
+.myfrm .col-sm-6 input  {
+  /*position: absolute;*/
+  /*right: 120px;*/
+}
+.myfrm .form-check-label{
+  position: relative;
+  left: 90px;
+  width: 360px;
+  margin: 0 !important;
+}
+@media (max-width: 767px){
+  .myfrm .col-sm-6 input {
+    position: static;
+  }
+}
+@media (max-width: 576px) {
+
+}
+
+li.list-group-item.active {
+  background-color: white;
+  border: 0px;
+}
+
+.list-group-item {
+  border: 0px !important;
+}
