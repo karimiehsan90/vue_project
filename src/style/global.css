@@ -18,6 +18,10 @@
   src: url('http://localhost/api/IRANSans.ttf');
 }
 
+:not(.fa) {
+  font-family: 'IranSans', sans-serif;
+}
+
 .bg-navbar {
   background: var(--shadow);
 }
