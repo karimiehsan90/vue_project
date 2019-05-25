@@ -57,16 +57,19 @@
         methods: {
             onSubmit(){
                 var vm = this;
-                $.post("/api/sign-in.json", {
+                $.post("/ticketing/rest/auth/login", {
                     email: vm.email,
                     password: vm.password,
                 }).done(function (data) {
 
-                    if (data.status){
+                    if (data.success){
                         localStorage.setItem("token", data.data.token);
                         localStorage.setItem("role", data.data.role);
                         localStorage.setItem("name", data.data.name);
                         vm.$router.push('/');
+                    }
+                    else {
+                        alert(data.message);
                     }
                 });
             }
