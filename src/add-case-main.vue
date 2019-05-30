@@ -84,7 +84,7 @@
         },
         created: function () {
             var vm = this;
-            $.post('/ticketing/rest/auth/list', {
+            $.post('/ticketing/rest/case/list', {
                 token: localStorage.getItem("token")
             }, function (data) {
                 if (data.success){
