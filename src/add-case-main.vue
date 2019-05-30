@@ -62,7 +62,7 @@
         methods: {
             onSubmit(){
                 var vm = this;
-                $.post('/ticketing/rest/auth/setCase', {
+                $.post('/ticketing/rest/case/setCase', {
                     title: vm.title,
                     to: vm.to1,
                     important: vm.imp,
