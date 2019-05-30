@@ -4,22 +4,22 @@
                 <div class="form-inline my-3">
                     <div IsLtr="true" class="col-sm-6 float-left">
                         <label class="small mx-3 float-right">ایمیل<span class="text-danger">*</span></label>
-                        <input type="email" class="form-control form-control-sm" name="email" :model="email"/>
+                        <input type="email" class="form-control form-control-sm" name="email" v-model="email"/>
                     </div>
                     <div class="col-sm-6 float-right my-3 my-sm-2">
                         <label class="small mx-3 float-right">نام و نامخانوادگی<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-sm" name="name" :model="name"/>
+                        <input type="text" class="form-control form-control-sm" name="name" v-model="name"/>
                     </div>
                 </div>
                 <hr class="d-none d-sm-block">
                 <div class="form-inline my-3">
                     <div class="col-sm-6 float-left">
                         <label class="small mx-3 float-right">&nbsp; &nbsp; رمز عبور جدید<span class="text-danger">*</span></label>
-                        <input type="password" class="form-control form-control-sm" name="password" :model="password"/>
+                        <input type="password" class="form-control form-control-sm" name="password" v-model="password"/>
                     </div>
                     <div class="col-sm-6 float-right my-3 my-sm-2">
                         <label class="small mx-3 float-right">رمز عبور قبلی<span class="text-danger">*</span></label>
-                        <input type="password" class="form-control form-control-sm" name="perv_pass" :model="perv_pass"/>
+                        <input type="password" class="form-control form-control-sm" name="perv_pass" v-model="perv_pass"/>
                     </div>
                 </div>
                 <!--<div class="form-inline my-3">-->
@@ -36,7 +36,7 @@
                 <div class="form-inline my-3">
                     <div Mask="Number" class="col-sm-6 float-left">
                         <label class="small mx-3 float-right">موبایل<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" type="text" name="phone" :model="phone" />
+                        <input class="form-control form-control-sm" type="text" name="phone" v-model="phone" />
                     </div>
                     <!--<div Mask="Number" class="col-sm-6 float-right my-3 my-sm-2">-->
                         <!--<label class="small mx-3 float-right">تلفن ثابت<span class="text-danger">*</span></label>-->
@@ -57,7 +57,7 @@
                 <div class="form-inline my-3" dir="ltr" >
 
                     <div class=" mx-sm-auto mr-3 mr-sm-0" >
-                        <input class="form-control form-control-sm" type="hidden" id="tokInp" name="_token" :model="token">
+                        <input class="form-control form-control-sm" type="hidden" id="tokInp" name="_token" v-model="token">
                         <button class="btn btn-success text-white btn-sm" type="submit">ثبت تغییرات</button>
                     </div>
                 </div>
@@ -82,7 +82,6 @@
         methods:{
             OnSubmit: function () {
                 var vm = this;
-                alert('here');
                 $.post('/ticketing/rest/user/editPro', {
                     token: localStorage.getItem("token"),
                     email:vm.email,
