@@ -1,6 +1,10 @@
 <template>
     <div class="container card-white col-sm-8 entrance-style-filters card-white col-8 mx-auto loading-mode">
         <div class="spinner-border text-success position-absolute mt-10 z-100 d-none"></div>
+        <div class="row mb-3 mt-2 dir-ltr">
+            <span class="fa fa-user-plus ml-3 font-size-300"></span>
+            <span class="fa fa-file-pdf ml-2 font-size-300"></span>
+        </div>
         <div class="row mb-2 mt-2">
             <div class="col">
                 <button class="btn w-100 btn-bg-stone" id="manage" @click="showManages" v-if="mode=='manage'">مدیریت کاربران</button>
@@ -24,7 +28,7 @@
                         نام
                     </td>
                     <td>
-                        نام کاربری
+ایمیل
                     </td>
                     <td>
                         سمت
@@ -43,13 +47,16 @@
                         {{a.name}}
                     </td>
                     <td>
-                        {{a.username}}
+                        {{a.email}}
                     </td>
                     <td>
-                        {{a.post}}
+                        {{a.role}}
                     </td>
                     <td>
                         <span class="fa fa-trash bg-hover-red hover-pointer" @click="deleteUser(a.id, i)"></span>
+                        <span class="fa fa-ban bg-hover-red color-green hover-pointer" v-if="a.is_active" @click="deactiveUser(a.id, i)"></span>
+                        <span class="fa fa-ban bg-red bg-hover-green hover-pointer" v-if="!a.is_active" @click="activeUser(a.id, i)"></span>
+                        <span class="fa fa-edit bg-red hover-pointer"></span>
                     </td>
                 </tr>
 
@@ -69,7 +76,7 @@
                         نام
                     </td>
                     <td>
-                        نام کاربری
+ایمیل
                     </td>
                     <td>
                         مدیریت
@@ -85,11 +92,11 @@
                         {{a.name}}
                     </td>
                     <td>
-                        {{a.username}}
+                        {{a.email}}
                     </td>
                     <td>
                         <span class="fa fa-trash bg-hover-red hover-pointer" @click="declineTeacher(a.id, i)"></span>
-                        <span class="fa fa-check bg-hover-green hover-pointer" @click="acceptTeacher(a.id)"></span>
+                        <span class="fa fa-check bg-hover-green hover-pointer" @click="acceptTeacher(a.id, i)"></span>
                     </td>
                 </tr>
 
@@ -121,7 +128,7 @@
             deleteUser(id, i){
                 var vm = this;
                 var tkn = localStorage.getItem("token");
-                $.post('http://localhost/api/delete-user.json', {
+                $.post('/api/delete-user.json', {
                     token: tkn,
                     id: id
                 }, function (data) {
@@ -145,13 +152,45 @@
             acceptTeacher(id, i){
                 var vm = this;
                 var tkn = localStorage.getItem("token");
-                $.post('/api/accept-teacher.json', {
+                $.post('/ticketing/rest/auth/setAccept', {
                     token: tkn,
                     id: id
                 }, function (data) {
-                    if (data.status){
+                    if (data.success){
+                        var t = vm.accepts[i];
                         vm.accepts.splice(i, 1);
-                        vm.users.push(data.data);
+                        vm.users.push({
+                            role: "استاد",
+                            email: t.email,
+                            name: t.name,
+                            id: t.id
+                        });
+                    }
+                })
+            },
+            deactiveUser(id, i){
+                var vm = this;
+                var tkn = localStorage.getItem("token");
+                $.post('/ticketing/rest/auth/setdeactive', {
+                    token: tkn,
+                    id: id
+                }, function (data) {
+                    if (data.success){
+                        var t = vm.users[i];
+                        t.is_active = false;
+                    }
+                })
+            },
+            activeUser(id, i){
+                var vm = this;
+                var tkn = localStorage.getItem("token");
+                $.post('/ticketing/rest/auth/setActive', {
+                    token: tkn,
+                    id: id
+                }, function (data) {
+                    if (data.success){
+                        var t = vm.users[i];
+                        t.is_active = true;
                     }
                 })
             }
@@ -160,11 +199,16 @@
         created: function () {
             var vm = this;
             var tkn = localStorage.getItem("token");
-            $.post('/api/admin-users.json', {
+            $.post('/ticketing/rest/user/manage', {
                 token: tkn
             }, function (data) {
-                vm.users = data.data.manages;
-                vm.accepts = data.data.accepts;
+                if (data.success) {
+                    vm.users = data.data.manages;
+                    vm.accepts = data.data.accepts;
+                }
+                else {
+                    alert(data.message);
+                }
             })
         }
     }
