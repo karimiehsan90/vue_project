@@ -51,6 +51,10 @@
     font-size: 100%;
 }
 
+.font-size-300{
+    font-size: 25px;
+}
+
 .color-green {
     color: var(--stone);
 }
@@ -171,6 +175,10 @@ thead {
 }
 
 .bg-hover-red:hover {
+    color: red;
+}
+
+.bg-red {
     color: red;
 }
 

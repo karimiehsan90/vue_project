@@ -12,9 +12,7 @@
                 <div class="form-group mr-2">
                     <label for="to">مربوط به: </label>
                     <select class="form-control" name="to" id="to" v-model="to1">
-                        <option>تست1</option>
-                        <option>تست2</option>
-                        <option>تست3</option>
+                        <option v-for="human in people" :value="human.id">{{human.name}}</option>
                     </select>
                 </div>
             </div>
@@ -22,9 +20,9 @@
                 <div class="form-group mr-2 ml-2">
                     <label for="importance">اهمیت: </label>
                     <select class="form-control" name="to" id="importance" v-model="imp">
-                        <option>زیاد</option>
-                        <option>متوسط</option>
-                        <option>کم</option>
+                        <option value="2">زیاد</option>
+                        <option value="1">متوسط</option>
+                        <option value="0">کم</option>
                     </select>
                 </div>
             </div>
@@ -38,7 +36,7 @@
         <div class="row w-100">
             <div class="form-group mr-2 ml-2 w-100">
                 <label for="file">فایل: </label>
-                <input type="file" class="form-control" name="file" id="file">
+                <input type="file" class="form-control" name="file" id="file" @change="onChange" ref="file">
             </div>
         </div>
         <div class="row w-100">
@@ -58,26 +56,60 @@
                 to1: '',
                 imp: '',
                 text: '',
+                people: [],
+                file: null
             }
         },
         methods: {
             onSubmit(){
                 var vm = this;
-                $.post('/api/student-add-case.json', {
-                    title: vm.title,
-                    to: vm.to1,
-                    important: vm.imp,
-                    text: vm.text,
-                }, function (data) {
-                    if(data.status){
-                        vm.title = '';
-                        vm.to1 = '';
-                        vm.imp = '';
-                        vm.text = '';
-                        alert(data.message);
+                var formData = new FormData();
+                formData.append('title', vm.title);
+                formData.append('to', vm.to1);
+                formData.append('important', vm.imp);
+                formData.append('body', vm.text);
+                formData.append('token', localStorage.getItem('token'));
+                if (vm.file != null){
+                    formData.append('file', vm.file);
+                }
+                $.ajax({
+                    url: '/ticketing/rest/case/setCase',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    success: function (data) {
+                        if(data.success){
+                            vm.title = '';
+                            vm.to1 = '';
+                            vm.imp = '';
+                            vm.text = '';
+                            alert(data.message);
+                        }
+                        else {
+                            alert(data.message);
+                        }
                     }
-                })
+                });
+            },
+            onChange(){
+                this.file = this.$refs.file.files[0];
             }
+        },
+        created: function () {
+            var vm = this;
+            $.post('/ticketing/rest/auth/list', {
+                token: localStorage.getItem("token")
+            }, function (data) {
+                if (data.success){
+                    vm.people = data.data;
+                }
+                else {
+                    alert(data.message);
+                }
+            })
         }
     }
 </script>

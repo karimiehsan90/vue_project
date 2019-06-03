@@ -1,0 +1,10 @@
+{
+  "status": true,
+  "message": "sth",
+  "data": {
+        "name": "تست",
+        "username": "asdfg",
+        "post": "معلم",
+        "id": 10
+      }
+}

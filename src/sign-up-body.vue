@@ -95,15 +95,18 @@
         methods:{
             onSubmit(){
                 var vm = this;
-                $.post("/api/sign-up.json", {
+                $.post("/ticketing/rest/auth/register", {
                     name: vm.name,
                     email: vm.email,
                     password: vm.password,
                     re_password: vm.r_pass,
                     role: vm.role
                 }).done(function (data) {
-                    if (data.status){
+                    if (data.success){
                         vm.$router.push('/sign-in');
+                    }
+                    else {
+                        alert(data.message);
                     }
                 });
             },

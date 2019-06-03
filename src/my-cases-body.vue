@@ -70,10 +70,12 @@
         created: function () {
             var vm = this;
             var tkn = localStorage.getItem("token");
-            $.post('/api/admin-cases.json', {
+            $.post('/ticketing/rest/case/getMyCase', {
                 token: tkn
             }, function (data) {
-                vm.cases = data.data
+                if (data.success) {
+                    vm.cases = data.data
+                }
             })
         }
     }
