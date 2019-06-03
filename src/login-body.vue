@@ -60,13 +60,13 @@
                 $.post("/ticketing/rest/auth/login", {
                     email: vm.email,
                     password: vm.password,
-                }).done(function (data) {
+                }).done(function (data) {//data is response
 
                     if (data.success){
                         localStorage.setItem("token", data.data.token);
                         localStorage.setItem("role", data.data.role);
                         localStorage.setItem("name", data.data.name);
-                        vm.$router.push('/');
+                        vm.$router.push('/');//redirect
                     }
                     else {
                         alert(data.message);
