@@ -17,7 +17,7 @@
                     <label for="user_to">گیرنده: </label>
                     <select id="user_to" class="form-control" v-model="to">
                         <option v-for="u in users" v-bind:value="u.id">
-{{u.name}}
+                            {{u.name}}
                         </option>
                     </select>
                 </div>
@@ -59,7 +59,7 @@
                 <tbody>
                 <tr v-for="c, i in cases">
                     <td>
-                        {{i+1}}
+                        {{i + 1}}
                     </td>
                     <td>
                         {{c.title}}
@@ -87,29 +87,34 @@
                 </tbody>
             </table>
         </div>
+        <div class="row mb-3 mt-2 dir-ltr">
+            <span class="fa fa-file-pdf ml-5 font-size-300" @click="download"></span>
+        </div>
     </div>
 </template>
 
 <script>
+//    import jsPDF from 'jspdf'
+
     export default {
         name: 'sign-up',
         data() {
             return {
                 cases: [],
-                to: '',
-                from: '',
+                to: null,
+                from: null,
                 users: []
             }
         },
         created: function () {
             var vm = this;
             var tkn = localStorage.getItem("token");
-            $.post('http://localhost/api/admin-cases.json', {
+            $.post('/ticketing/rest/case/all', {
                 token: tkn
             }, function (data) {
                 vm.cases = data.data
             });
-            $.post('http://localhost/api/admin-users.json', {
+            $.post('/ticketing/rest/user/manage', {
                 token: tkn
             }, function (data) {
                 vm.users = data.data.manages;
@@ -119,13 +124,26 @@
             filter() {
                 var vm = this;
                 var tkn = localStorage.getItem("token");
-                $.post('http://localhost/api/admin-cases.json', {
-                    token: tkn,
-                    from: vm.from,
-                    to: vm.to
-                }, function (data) {
-                    vm.cases = data.data
+                var requestData = {
+                    token: tkn
+                };
+                if (vm.from != null){
+                    requestData.from = vm.from;
+                }
+                if (vm.to != null){
+                    requestData.to = vm.to;
+                }
+                $.post('/ticketing/rest/case/all', requestData, function (data) {
+                    if (data.success) {
+                        vm.cases = data.data;
+                    }
+                    else {
+                        alert(data.message);
+                    }
                 })
+            },
+            download() {
+                window.print();
             }
         }
     }
