@@ -2,7 +2,7 @@
     <div class="container card-white col-sm-8 entrance-style-filters card-white col-8 mx-auto loading-mode">
         <div class="spinner-border text-success position-absolute mt-10 z-100 d-none"></div>
         <div class="row mb-3 mt-2 dir-ltr">
-            <span class="fa fa-user-plus ml-3 font-size-300"></span>
+            <span class="fa fa-user-plus ml-3 font-size-300 cursor-pointer bg-hover-green" data-target="#regModal" data-toggle="modal"></span>
             <span class="fa fa-file-pdf ml-2 font-size-300"></span>
         </div>
         <div class="row mb-2 mt-2">
@@ -103,6 +103,71 @@
                 </tbody>
             </table>
         </div>
+        <div class="modal fade" id="regModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h6 class="modal-title mx-auto">اضافه کردن کاربر</h6>
+                        <button type="button" class="close float-left small position-absolute" style="left: 5px ; top: 10px;" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form action="" method="post">
+
+                            <div class="form-group">
+                                <label class="float-right form-style" >نام و نام خانوادگی</label>
+                                <div>
+                                    <input type="text" class="form-control" v-model="name">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-style float-right" >پست الکترونیک</label>
+                                <div>
+                                    <input type="text" class="form-control" v-model="email">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="form-style float-right" >رمز عبور</label>
+                                <div>
+                                    <input type="password" class="form-control" v-model="password">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-style float-right" >تکرار رمز عبور</label>
+                                <div>
+                                    <input type="password" class="form-control"  v-model="r_pass">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-style float-right">نقش را وارد کنید </label>
+                                <select  class="form-control" v-model="role">
+                                    <option id="student1" value="student">
+                                        دانشجو
+                                    </option>
+                                    <option id="teacher1" value="teacher">
+                                        استاد
+                                    </option>
+                                    <option id="other1" value="other">
+                                        سایر
+                                    </option>
+                                </select>
+                            </div>
+
+                            <br>
+                            <button type="button" class="btn btn-block btn-success" @click="onSubmit()">
+                                ثبت نام
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -113,7 +178,12 @@
             return {
                 users: [],
                 accepts: [],
-                mode: 'manage'
+                mode: 'manage',
+                name: '',
+                email: '',
+                password: '',
+                r_pass : '',
+                role: ''
             }
         },
         methods:{
@@ -193,6 +263,22 @@
                         t.is_active = true;
                     }
                 })
+            },
+            onSubmit() {
+                var vm = this;
+                $.post("/ticketing/rest/auth/registerByManager", {
+                    name: vm.name,
+                    email: vm.email,
+                    password: vm.password,
+                    re_password: vm.r_pass,
+                    role: vm.role
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#regModal').modal('hide');
+                    } else {
+                        alert(data.message);
+                    }
+                });
             }
 
         },
