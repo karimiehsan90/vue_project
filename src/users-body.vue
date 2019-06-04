@@ -56,7 +56,7 @@
                         <span class="fa fa-trash bg-hover-red hover-pointer" @click="deleteUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-hover-red color-green hover-pointer" v-if="a.is_active" @click="deactiveUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-red bg-hover-green hover-pointer" v-if="!a.is_active" @click="activeUser(a.id, i)"></span>
-                        <span class="fa fa-edit bg-red hover-pointer"></span>
+                        <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.id"></span>
                     </td>
                 </tr>
 
@@ -168,6 +168,53 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="editUser">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title mx-auto" id="test">ویرایش کاربر</h6>
+                        <button type="button" class="close float-left small position-absolute" style="left: 5px ; top: 10px;" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form method="post" @submit.prevent="editPro()">
+                                <div IsLtr="true" class="form-group">
+                                    <label class="small mx-3 float-right">ایمیل<span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control form-control-sm" name="email" v-model="email"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mx-3 float-right" >نام و نامخانوادگی<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" name="name" v-model="name"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mx-3 float-right" >&nbsp; &nbsp; رمز عبور جدید<span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control form-control-sm" name="password" v-model="password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mx-3 float-right" >رمز عبور قبلی<span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control form-control-sm" name="perv_pass" v-model="perv_pass"/>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label class="small mx-3 float-right">موبایل<span class="text-danger">*</span></label>
+                                    <input class="form-control form-control-sm" type="text" name="phone" v-model="phone" />
+                                </div>
+
+
+                            <br class="d-sm-inline d-none">
+
+                                <div class=" mx-sm-auto mr-3 mr-sm-0" >
+                                    <input class="form-control form-control-sm" type="hidden" id="token" v-model="userToken">
+                                    <button class="btn btn-success btn-block" type="submit">ثبت تغییرات</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -183,7 +230,10 @@
                 email: '',
                 password: '',
                 r_pass : '',
-                role: ''
+                role: '',
+                perv_pass:'',
+                phone:'',
+                userToken:''
             }
         },
         methods:{
@@ -275,10 +325,38 @@
                 }).done(function (data) {
                     if (data.success) {
                         $('#regModal').modal('hide');
+                        vm.name='';
+                        vm.email='';
+                        vm.password='';
+                        vm.r_pass='';
                     } else {
                         alert(data.message);
                     }
                 });
+            },
+            editPro(){
+                var vm = this;
+                $.post('/ticketing/rest/user/editPro', {
+                    token: vm.userToken,
+                    email:vm.email,
+                    password:vm.password,
+                    perv_pass:vm.perv_pass,
+                    phone:vm.phone,
+                    name:vm.name
+                }, function (data) {
+                    if(data.success){
+                        vm.email = '';
+                        vm.password = '';
+                        vm.perv_pass = '';
+                        vm.phone = '';
+                        vm.name = '';
+                        vm.userToken='';
+                        $('#editUser').modal('hide');
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                })
             }
 
         },
@@ -296,6 +374,19 @@
                     alert(data.message);
                 }
             })
+        },
+        mounted() {
+            var vm = this ;
+            $('#editUser').on('show.bs.modal', function (event) {
+                vm.email = '';
+                vm.password = '';
+                vm.perv_pass = '';
+                vm.phone = '';
+                vm.name = '';
+                var button = $(event.relatedTarget);
+                var recipient = button.data('whatever');
+                vm.userToken=recipient;
+            });
         }
     }
 </script>
