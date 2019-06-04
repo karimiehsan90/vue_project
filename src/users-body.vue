@@ -56,7 +56,7 @@
                         <span class="fa fa-trash bg-hover-red hover-pointer" @click="deleteUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-hover-red color-green hover-pointer" v-if="a.is_active" @click="deactiveUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-red bg-hover-green hover-pointer" v-if="!a.is_active" @click="activeUser(a.id, i)"></span>
-                        <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.id"></span>
+                        <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.name+'/#/'+a.email+'/#/'+a.id"></span>
                     </td>
                 </tr>
 
@@ -207,7 +207,7 @@
                             <br class="d-sm-inline d-none">
 
                                 <div class=" mx-sm-auto mr-3 mr-sm-0" >
-                                    <input class="form-control form-control-sm" type="hidden" id="token" v-model="userToken">
+                                    <input class="form-control form-control-sm" type="" id="token" v-model="userToken">
                                     <button class="btn btn-success btn-block" type="submit">ثبت تغییرات</button>
                                 </div>
                         </form>
@@ -329,6 +329,7 @@
                         vm.email='';
                         vm.password='';
                         vm.r_pass='';
+                        vm.role=''
                     } else {
                         alert(data.message);
                     }
@@ -377,15 +378,24 @@
         },
         mounted() {
             var vm = this ;
-            $('#editUser').on('show.bs.modal', function (event) {
+            $('#regModal').on('show.bs.modal', function (event) {
                 vm.email = '';
+                vm.password = '';
+                vm.r_pass = '';
+                vm.phone = '';
+                vm.name = '';
+                vm.role='';
+            })
+            $('#editUser').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var recipient = button.data('whatever');
+                var nei = recipient.split("/#/");
+                vm.email = nei[1];
                 vm.password = '';
                 vm.perv_pass = '';
                 vm.phone = '';
-                vm.name = '';
-                var button = $(event.relatedTarget);
-                var recipient = button.data('whatever');
-                vm.userToken=recipient;
+                vm.name = nei[0];
+                vm.userToken=nei[2];
             });
         }
     }
