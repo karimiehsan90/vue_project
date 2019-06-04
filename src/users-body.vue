@@ -207,7 +207,7 @@
                             <br class="d-sm-inline d-none">
 
                                 <div class=" mx-sm-auto mr-3 mr-sm-0" >
-                                    <input class="form-control form-control-sm" type="" id="token" v-model="userToken">
+                                    <input class="form-control form-control-sm" type="hidden" id="token" v-model="userToken">
                                     <button class="btn btn-success btn-block" type="submit">ثبت تغییرات</button>
                                 </div>
                         </form>
