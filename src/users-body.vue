@@ -52,8 +52,16 @@
                     <td>
                         {{a.role}}
                     </td>
-                    <td>
-                        <span class="fa fa-trash bg-hover-red hover-pointer" @click="deleteUser(a.id, i)"></span>
+                    <td style="transition: all 0.3ms">
+                        <div class="mydropdown d-inline">
+                            <span class="fa fa-trash bg-hover-red border-0 bg-transparent cursor-pointer" @click="mydd" aria-expanded="false" ></span>
+                            <div class="dropdown-content dropdown-menu py-0">
+                                <h6 class="dropdown-header p-0 text-center small pt-2">آیا مطمینید ؟</h6>
+                                <span class="cursor-pointer text-info hover-link text-center small border-0" style="right: 0;bottom: 0;left: 50%;"  @click="deleteUser(a.id, i ,$event)">بله</span>
+                                <span class="cursor-pointer text-info hover-link text-center small" style="left: 0;bottom: 0;right: 50%;" @click="kheir">خیر</span>
+                            </div>
+                        </div>
+
                         <span class="fa fa-ban bg-hover-red color-green hover-pointer" v-if="a.is_active" @click="deactiveUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-red bg-hover-green hover-pointer" v-if="!a.is_active" @click="activeUser(a.id, i)"></span>
                         <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.name+'/#/'+a.email+'/#/'+a.id"></span>
@@ -245,17 +253,18 @@
                 this.mode = 'accept';
 
             },
-            deleteUser(id, i){
+            deleteUser: function (id, i , event) {
                 var vm = this;
                 var tkn = localStorage.getItem("token");
                 $.post('/api/delete-user.json', {
                     token: tkn,
                     id: id
                 }, function (data) {
-                    if (data.status){
+                    if (data.status) {
                         vm.users.splice(i, 1);
                     }
                 })
+                this.kheir(event);
             },
             declineTeacher(id, i){
                 var vm = this;
@@ -358,6 +367,22 @@
                         alert(data.message);
                     }
                 })
+            },
+            mydd: function (event) {
+                if (!event.target.nextElementSibling.classList.contains('show')){
+                    $('.dropdown-content').removeClass('show');
+                    $('.fa-trash').css('color','black');
+
+                    event.target.nextElementSibling.classList.add("show");
+                    event.target.style.color = 'red';
+                }else {
+                    $('.dropdown-content').removeClass('show');
+                    $('.fa-trash').css('color','black');
+                }
+            },
+            kheir: function (event) {
+                event.target.parentElement.classList.remove("show");
+                $('.fa-trash').css('color','black');
             }
 
         },
@@ -385,7 +410,7 @@
                 vm.phone = '';
                 vm.name = '';
                 vm.role='';
-            })
+            });
             $('#editUser').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var recipient = button.data('whatever');
