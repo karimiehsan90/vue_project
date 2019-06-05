@@ -83,3 +83,33 @@ li.list-group-item.active {
 .list-group-item {
   border: 0px !important;
 }
+
+.show{
+  display: block!important ;
+}
+.mydropdown {
+  display: inline;
+  position: relative ;
+}
+.dropdown-content {
+  display: none;
+  position: relative;
+  transform: translate(-70px,-7px);
+  min-width: 150px;
+  background-color: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  font-size: 14px;
+  min-height: 50px;
+  max-height: 50px;
+  overflow: hidden;
+}
+.dropdown-content span{
+  position: absolute;
+  border-right:1px solid #e2e3e5;
+  border-top: 1px solid #e2e3e5 !important;
+}
+.dropdown-content span:hover{
+  background-color: rgba(200,200,200,0.3);
+  /*change color*/
+}

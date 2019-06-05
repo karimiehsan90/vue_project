@@ -175,7 +175,7 @@ thead {
 }
 
 .bg-hover-red:hover {
-    color: red;
+    color: red!important;
 }
 
 .bg-red {
@@ -183,7 +183,7 @@ thead {
 }
 
 .bg-hover-green:hover {
-    color: green;
+    color: green!important;
 }
 
 .cursor-pointer:hover {
