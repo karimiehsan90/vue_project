@@ -64,7 +64,7 @@
 
                         <span class="fa fa-ban bg-hover-red color-green hover-pointer" v-if="a.is_active" @click="deactiveUser(a.id, i)"></span>
                         <span class="fa fa-ban bg-red bg-hover-green hover-pointer" v-if="!a.is_active" @click="activeUser(a.id, i)"></span>
-                        <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.name+'/#/'+a.email+'/#/'+a.id"></span>
+                        <span class="fa fa-edit bg-hover-green hover-pointer" data-target="#editUser" data-toggle="modal" :data-whatever="a.name+'/#/'+a.email+'/#/'+a.id+'/#/'+i"></span>
                     </td>
                 </tr>
 
@@ -103,8 +103,14 @@
                         {{a.email}}
                     </td>
                     <td>
-                        <span class="fa fa-trash bg-hover-red hover-pointer" @click="declineTeacher(a.id, i)"></span>
-                        <span class="fa fa-check bg-hover-green hover-pointer" @click="acceptTeacher(a.id, i)"></span>
+                        <div class="mydropdown d-inline">
+                            <span class="fa fa-trash bg-hover-red border-0 bg-transparent cursor-pointer" @click="mydd" aria-expanded="false" ></span>
+                            <div class="dropdown-content dropdown-menu py-0">
+                                <h6 class="dropdown-header p-0 text-center small pt-2">آیا مطمینید ؟</h6>
+                                <span class="cursor-pointer text-info hover-link text-center small border-0" style="right: 0;bottom: 0;left: 50%;"  @click="declineTeacher(a.id, i ,$event)">بله</span>
+                                <span class="cursor-pointer text-info hover-link text-center small" style="left: 0;bottom: 0;right: 50%;" @click="kheir">خیر</span>
+                            </div>
+                        </div><span class="fa fa-check bg-hover-green hover-pointer" @click="acceptTeacher(a.id, i)"></span>
                     </td>
                 </tr>
 
@@ -124,37 +130,37 @@
                         <form action="" method="post">
 
                             <div class="form-group">
-                                <label class="float-right form-style" >نام و نام خانوادگی</label>
+                                <label class="float-right form-style small" >نام و نام خانوادگی</label>
                                 <div>
-                                    <input type="text" class="form-control" v-model="name">
+                                    <input type="text" class="form-control form-control-sm" v-model="name">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-style float-right" >پست الکترونیک</label>
+                                <label class="form-style float-right small" >پست الکترونیک</label>
                                 <div>
-                                    <input type="text" class="form-control" v-model="email">
+                                    <input type="text" class="form-control form-control-sm" v-model="email">
                                 </div>
                             </div>
 
 
                             <div class="form-group">
-                                <label class="form-style float-right" >رمز عبور</label>
+                                <label class="form-style float-right small" >رمز عبور</label>
                                 <div>
-                                    <input type="password" class="form-control" v-model="password">
+                                    <input type="password" class="form-control form-control-sm" v-model="password">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-style float-right" >تکرار رمز عبور</label>
+                                <label class="form-style float-right small" >تکرار رمز عبور</label>
                                 <div>
-                                    <input type="password" class="form-control"  v-model="r_pass">
+                                    <input type="password" class="form-control form-control-sm"  v-model="r_pass">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-style float-right">نقش را وارد کنید </label>
-                                <select  class="form-control" v-model="role">
+                                <label class="form-style float-right small">نقش را وارد کنید </label>
+                                <select  class="form-control form-control-sm" v-model="role">
                                     <option id="student1" value="student">
                                         دانشجو
                                     </option>
@@ -241,7 +247,8 @@
                 role: '',
                 perv_pass:'',
                 phone:'',
-                userToken:''
+                userToken:'',
+                ind:-1
             }
         },
         methods:{
@@ -256,27 +263,29 @@
             deleteUser: function (id, i , event) {
                 var vm = this;
                 var tkn = localStorage.getItem("token");
-                $.post('/api/delete-user.json', {
+                $.post('/ticketing/rest/auth/deleteUser', {
                     token: tkn,
                     id: id
                 }, function (data) {
-                    if (data.status) {
+                    if (data.success) {
                         vm.users.splice(i, 1);
                     }
-                })
+                });
                 this.kheir(event);
             },
-            declineTeacher(id, i){
+            declineTeacher(id, i , event){
                 var vm = this;
                 var tkn = localStorage.getItem("token");
-                $.post('/api/decline-teacher.json', {
+                $.post('/ticketing/rest/auth/deleteUser', {
                     token: tkn,
                     id: id
                 }, function (data) {
-                    if (data.status){
+                    if (data.success){
                         vm.accepts.splice(i, 1);
                     }
-                })
+                    // alert(data.message);
+                });
+                this.kheir(event);
             },
             acceptTeacher(id, i){
                 var vm = this;
@@ -284,6 +293,7 @@
                 $.post('/ticketing/rest/auth/setAccept', {
                     token: tkn,
                     id: id
+
                 }, function (data) {
                     if (data.success){
                         var t = vm.accepts[i];
@@ -333,6 +343,13 @@
                     role: vm.role
                 }).done(function (data) {
                     if (data.success) {
+                        vm.users.push({
+                            role: vm.role,
+                            email: vm.email,
+                            name: vm.name,
+                            id: vm.id,
+                            is_active:true
+                        });
                         $('#regModal').modal('hide');
                         vm.name='';
                         vm.email='';
@@ -355,6 +372,9 @@
                     name:vm.name
                 }, function (data) {
                     if(data.success){
+                        var t = vm.users[vm.ind];
+                        t.email = vm.email ;
+                        t.name = vm.name ;
                         vm.email = '';
                         vm.password = '';
                         vm.perv_pass = '';
@@ -414,14 +434,16 @@
             $('#editUser').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var recipient = button.data('whatever');
-                var nei = recipient.split("/#/");
-                vm.email = nei[1];
+                var neii = recipient.split("/#/");
+                vm.email = neii[1];
                 vm.password = '';
                 vm.perv_pass = '';
                 vm.phone = '';
-                vm.name = nei[0];
-                vm.userToken=nei[2];
+                vm.name = neii[0];
+                vm.userToken=neii[2];
+                vm.ind=parseInt(neii[3]);
             });
+
         }
     }
 </script>
