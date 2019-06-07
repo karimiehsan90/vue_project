@@ -3,7 +3,7 @@
         <div class="spinner-border text-success position-absolute mt-10 z-100 d-none"></div>
         <div class="row mb-3 mt-2 dir-ltr">
             <span class="fa fa-user-plus ml-3 font-size-300 cursor-pointer bg-hover-green" data-target="#regModal" data-toggle="modal"></span>
-            <span class="fa fa-file-pdf ml-2 font-size-300"></span>
+            <span class="fa fa-file-pdf ml-2 font-size-300 cursor-pointer bg-hover-red" @click="download"></span>
         </div>
         <div class="row mb-2 mt-2">
             <div class="col">
@@ -403,6 +403,9 @@
             kheir: function (event) {
                 event.target.parentElement.classList.remove("show");
                 $('.fa-trash').css('color','black');
+            },
+            download() {
+                window.print();
             }
 
         },

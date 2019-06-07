@@ -88,7 +88,7 @@
             </table>
         </div>
         <div class="row mb-3 mt-2 dir-ltr">
-            <span class="fa fa-file-pdf ml-5 font-size-300" @click="download"></span>
+            <span class="fa fa-file-pdf ml-5 font-size-300 bg-hover-red cursor-pointer" @click="download"></span>
         </div>
     </div>
 </template>
