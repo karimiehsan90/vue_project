@@ -10,14 +10,14 @@
       <img src="./img/explaination.png" class="">
       شرح
     </div>
-
+<form @submit.prevent="onSubmit">
     <div class="row">
       <div class="col-12 col-sm-12" id="reply" style="">
         <label class="form-style" for="reply"><b style="">
           <img src="./img/add.png" class="">
           افزودن توضیحات</b></label> <!--in this style have some margin-->
         <div class="div-input-each"> <!--in this style have some margin-->
-          <input style="border-style: dashed; border-color: var(--stone)" type="text" class="form-control-reply" id="changing-the-sitiuation" name="reply">
+          <input style="border-style: dashed; border-color: var(--stone)" type="text" class="form-control-reply" id="changing-the-sitiuation" v-model="content">
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
         <label id="closed-select" class="container-doing checkmark-text">
           <img src="./img/closed.png" class="">
           <span style="margin: 80px">بسته</span>
-          <input type="radio" name="radio" onclick="closeTextField()">
+          <input type="radio" name="radio" onclick="closeTextField()" value="1" v-model="status">
           <span class="checkmark"></span>
         </label>
 
@@ -36,7 +36,7 @@
           <img src="./img/ref.png" class="" style="width: 23px">
           <span style="margin: 80px">
             ارجاع</span>
-          <input type="radio" name="radio">
+          <input type="radio" name="radio" value="2" v-model="status">
           <span class="checkmark"></span>
         </label>
       </div>
@@ -59,12 +59,12 @@
       </div>
 
       <div class=" m-3" style="">
-        <button id="send-btn" type="button" class="btn m-3" style="background-color: var(--stone);" disabled>
+        <button id="send-btn" type="submit" class="btn m-3" style="background-color: var(--stone);" disabled>
           ارسال
         </button>
       </div>
     </div>
-
+</form>
     <div class="empty-div">
 
     </div>
@@ -73,5 +73,37 @@
 </template>
 
 <script>
+  export default {
+    name: 'edit-prof',
+    data() {
+      return {
+        content: '',
+        status: '',
+        to:-9
+      }
+    },
+    methods:{
+      onSubmit(){
+        var vm = this;
+        var tkn = localStorage.getItem("token");
+        $.post('/ticketing/rest/action/set', {
+          token: tkn,
+          case_id:vm.$parent.id,
+          content:vm.content,
+          status:parseInt(vm.status)
+        }, function (data) {
+            if (data.success){
+              vm.content="";
+              vm.status=-1;
+              alert(data.message)
+            }
+        })
+      }
 
+    },
+    created: function () {
+
+    }
+
+  }
 </script>

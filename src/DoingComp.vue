@@ -17,6 +17,7 @@
 
     export default {
         name: 'sign-up',
+        props:['caseId'],
         components: {
             'header-reg': header,
             's-nav': sidenav,
@@ -27,8 +28,15 @@
         data() {
             return {
                 page: 'my-cases',
-                role: localStorage.getItem("role")
+                role: localStorage.getItem("role"),
+                id:-1
             }
+        },
+        mounted() {
+            if (this.caseId){
+                this.id = parseInt(this.caseId);
+            }
+
         }
     }
 

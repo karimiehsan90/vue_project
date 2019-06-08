@@ -31,8 +31,8 @@
                 <tbody>
                 <tr v-for="(c, i) in cases">
                     <td>
-                        <router-link :to="'/panel/' + $parent.role + '/do/' + c.id">
-                        {{i+1}}
+                        <router-link :to="{name:$parent.role+'Do' , params:{caseId}}">
+                            <span @click="fun(c.id)">{{i+1}}</span>
                         </router-link>
                     </td>
                     <td>
@@ -66,10 +66,18 @@
         name: 'edit-prof',
         data() {
             return {
-                cases: []
+                cases: [],
+                caseId: -1
             }
         },
-        created: function () {
+        methods: {
+          fun :function(id){
+              var vm = this;
+              vm.caseId = id ;
+              console.log(this.$parent.role)
+          }
+        },
+        created: function(){
             var vm = this;
             var tkn = localStorage.getItem("token");
             $.post('/ticketing/rest/case/getCaseToMe', {

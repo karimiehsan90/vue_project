@@ -61,12 +61,16 @@ const router = new Router({routes: [
         component: CasesToMe
     },
     {
-        path: '/panel/teacher/do/:id',
-        component: DoingComp
+        path: '/panel/teacher/do/:caseId',
+        name:'teacherDo',
+        component: DoingComp,
+        props: true
     },
     {
-        path: '/panel/manager/do/:id',
-        component: DoingComp
+        path: '/panel/manager/do/:caseId',
+        name: 'managerDo',
+        component: DoingComp,
+        props: true
     },
     {
         path: '/panel/manager/all-cases',
