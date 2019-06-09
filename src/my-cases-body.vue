@@ -26,6 +26,9 @@
                     <td>
                         تعداد پاسخ
                     </td>
+                    <td>
+                        رضایت
+                    </td>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,6 +54,16 @@
                     <td>
                         {{c.answer_count}}
                     </td>
+                    <td>
+                        <div class="position-relative w-100 h-100 text-center">
+                            <div v-if="c.status!=='CLOSE'" class="position-absolute" style="bottom:0;top:0;left:0;right:0;z-index:5;color:lightslategray;">
+                                <span class="far fa-frown"></span>
+                                <span class="far fa-grin-beam"></span>
+                            </div>
+                            <span class="far fa-frown bg-hover-red cursor-pointer" v-bind:class="{'unhappy' : unhappy[i] && isActive}"    @click="setHappy(false , c, i)"></span>
+                            <span class="far fa-grin-beam bg-hover-green cursor-pointer" v-bind:class="{'happy' : happy[i] && isActive}"  @click="setHappy(true , c , i)"></span>
+                        </div>
+                    </td>
                 </tr>
 
                 </tbody>
@@ -61,10 +74,40 @@
 
 <script>
     export default {
-        name: 'edit-prof',
+        el:'#mycases',
+        name: 'mcb',
         data() {
             return {
-                cases: []
+                cases: [],
+                happy: [],
+                unhappy:[],
+                isActive:true
+            }
+        },
+        methods:{
+            setHappy(h,cid,i){
+                var vm = this;
+                var tkn = localStorage.getItem("token");
+                $.post('/ticketing/rest/case/setRate', {
+                    token: tkn,
+                    id: cid.id,
+                    happy: h
+                }, function (data) {
+                    vm.isActive=false;
+                    vm.happy[i] =h;
+                    vm.unhappy[i]=!h;
+                    vm.isActive=true;
+                })
+            },
+            fun(value){
+                var vm = this;
+                vm.happy.push(value.happy);
+                if (value.happy==null){
+                    vm.unhappy.push(value.happy);
+                } else{
+                    vm.unhappy.push(!value.happy);
+                }
+
             }
         },
         created: function () {
@@ -74,9 +117,10 @@
                 token: tkn
             }, function (data) {
                 if (data.success) {
-                    vm.cases = data.data
+                    vm.cases = data.data;
+                    vm.cases.forEach(vm.fun);
                 }
             })
-        }
+        },
     }
 </script>
