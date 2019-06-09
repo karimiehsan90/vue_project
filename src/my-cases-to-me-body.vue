@@ -31,7 +31,7 @@
                 <tbody>
                 <tr v-for="(c, i) in cases">
                     <td>
-                        <router-link :to="{name:$parent.role+'Do' , params:{caseId}}">
+                        <router-link :to="{name:$parent.role+'Do' , params:{caseId, title: c.title, body: c.body, file: c.file}}">
                             <span @click="fun(c.id)">{{i+1}}</span>
                         </router-link>
                     </td>

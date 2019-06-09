@@ -55,8 +55,6 @@
             logout(){
                 localStorage.removeItem("token");
                 localStorage.removeItem("role");
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut();
 //                router.push('/')
             },
             openSide(){
