@@ -12,7 +12,7 @@
     import sidenav from './sidenav.vue'
 
     export default {
-        name: 'sign in',
+        name: 'sign-in',
         components: {
             'login-body': login_body,
             'header-login': header,

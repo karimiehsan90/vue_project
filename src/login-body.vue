@@ -29,8 +29,9 @@
                     <br>
 
 
-                    <button type="button" class="btn-register" style="background-color: var(--stone);">
-                        ورود با حساب کاربری گوگل</button>
+                    <!--<button type="button" class="btn-register" style="background-color: var(&#45;&#45;stone);">
+                        ورود با حساب کاربری گوگل</button>-->
+                    <div id="google-login" class="g-signin2 btn-register" data-onsuccess="onSignIn(googleUser)" style="background-color: var(&#45;&#45;stone);"></div>
                     <br>
                     <br>
                     <router-link :to="'/sign-up'">
@@ -72,7 +73,33 @@
                         alert(data.message);
                     }
                 });
+            },
+            onSignIn(googleUser) {
+                var vm = this;
+                var idToken = googleUser.getAuthResponse().id_token;
+                $.post('/ticketing/rest/auth/google', {
+                    token: idToken
+                }).done(function (data) {
+                    if (data.success){
+                        localStorage.setItem("token", data.data.token);
+                        localStorage.setItem("role", data.data.role);
+                        localStorage.setItem("name", data.data.name);
+                        vm.$router.push('/');
+                    }
+                    else {
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut();
+                    }
+                }).fail(function () {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    auth2.signOut();
+                });
             }
+        },
+        mounted() {
+            gapi.signin2.render('google-login', {
+                onsuccess: this.onSignIn
+            })
         }
     }
 </script>
