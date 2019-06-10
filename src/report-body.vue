@@ -56,31 +56,46 @@
         },
         methods:{
             filter(){
-                console.log(this.fromDate);
-                console.log(typeof this.fromDate);
-                console.log(this.toDate);
-                console.log(typeof this.toDate);
+                var vm = this;
                 var ctx = document.getElementById('myChart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    // The type of chart we want to create
-                    type: 'pie',
-
-                    // The data for our dataset
-                    data: {
-                        labels: [1, 2, 3, 4, 5],
-                        datasets: [{
-                            label: 'نظرات کاربران',
-                            data: [10, 10, 5, 2, 20],
-                            backgroundColor: [
-                                "#F7464A",
-                                "#f78651",
-                                "#f7ef68",
-                                "#c8f772",
-                                "#38f719",
-                            ],
-                        }]
-                    },
+                var show = [0, 0];
+                $.post('/ticketing/rest/case/report', {
+                    token: localStorage.getItem("token"),
+                    from: vm.fromDate,
+                    to: vm.toDate
+                }).done(function (data) {
+                    if (data.success) {
+                        data.data.forEach(function (item, index, data) {
+                            if (item.happy){
+                                show[1]++;
+                            }
+                            else {
+                                show[0]++;
+                            }
+                        });
+                        var chart = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: ['ناراضی', 'راضی'],
+                                datasets: [{
+                                    label: 'نظرات کاربران',
+                                    data: show,
+                                    backgroundColor: [
+                                        "#F7464A",
+                                        "#38f719",
+                                    ],
+                                }]
+                            },
+                        })
+                    }
+                    else {
+                        alert(data.message);
+                    }
                 });
+                /* function (data) {
+                    alert('here');
+
+                });*/
             }
         }
     }

@@ -4,6 +4,10 @@
         <div class="row mb-3 mt-2 dir-ltr">
             <span class="fa fa-user-plus ml-3 font-size-300 cursor-pointer bg-hover-green" data-target="#regModal" data-toggle="modal"></span>
             <span class="fa fa-file-pdf ml-2 font-size-300 cursor-pointer bg-hover-red" @click="download"></span>
+            <span class="fa fa-file-excel ml-2 font-size-300 cursor-pointer bg-hover-green" @click="toExcel"></span>
+            <download-csv :json-data="this.users">
+                <span class="fa fa-file-csv ml-2 font-size-300 cursor-pointer bg-hover-green"></span>
+            </download-csv>
         </div>
         <div class="row mb-2 mt-2">
             <div class="col">
@@ -233,8 +237,14 @@
 </template>
 
 <script>
+    import Excel from 'xlsx'
+    import CSV from 'vue-json-to-csv'
+
     export default {
         name: 'edit-prof',
+        components: {
+            'download-csv': CSV
+        },
         data() {
             return {
                 users: [],
@@ -406,6 +416,16 @@
             },
             download() {
                 window.print();
+            },
+            toExcel() {
+                  var users = Excel.utils.json_to_sheet(this.users);
+                  var teachers = Excel.utils.json_to_sheet(this.accepts);
+
+                  var wb = Excel.utils.book_new();
+                  Excel.utils.book_append_sheet(wb, users, 'users');
+                  Excel.utils.book_append_sheet(wb, teachers, 'teachers');
+
+                  Excel.writeFile(wb, 'export.xlsx');
             }
 
         },

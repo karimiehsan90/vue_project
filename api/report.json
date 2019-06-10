@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "message": null,
+  "data": [
+    {
+      "happy": true
+    },
+    {
+      "happy": true
+    },
+    {
+      "happy": true
+    },
+    {
+      "happy": true
+    },
+    {
+      "happy": false
+    }
+  ]
+}
