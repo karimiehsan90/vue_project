@@ -56,6 +56,7 @@
         },
         methods:{
             filter(){
+                $("#myChart").html('');
                 var vm = this;
                 var ctx = document.getElementById('myChart').getContext('2d');
                 var show = [0, 0];
