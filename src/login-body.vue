@@ -59,6 +59,7 @@
                         </div>
                         <div class="form-group" v-if="showCode">
                             <label class="float-right small"> : کد فرستاده شده را وارد کنید </label>
+                            <button class="btn btn-sm btn-link small mx-auto d-inline" @click="showCode=false;showPhone=true;msg='';fcode='';">اصلاح شماره تلفن</button>
                             <input class="form-control-sm form-control" type="text" v-model="fcode">
                             <br>
                             <button class="btn btn-outline-info btn-sm btn-block" @click="sendCODE()">ادامه</button>
@@ -151,10 +152,11 @@
                     code: vm.fcode
                 }).done(function (data) {
                     if (data.success){
-                        vm.showPhone=true;
+                        vm.showPhone=false;
                         vm.showCode=false;
                         vm.fcode='';
                         vm.fphone='';
+                        setTimeout(function(){$('#forgetModal').modal('toggle'); }, 3000);
                     }
                     vm.msgCol=data.success;
                     vm.msg=data.message;
@@ -162,16 +164,25 @@
             },
         },
         mounted() {
+            var vm = this;
             gapi.signin2.render('google-login', {
                 onsuccess: this.onSignIn
             });
             $('#forgetModal').on('show.bs.modal', function (event) {
-                if (this.showPhone){
-                    this.msg='';
-                    this.fphone='';
+                console.log(vm.showCode);
+                console.log(vm.showPhone);
+                if (!vm.showCode){
+                    vm.msg='';
+                    vm.fphone='';
+                    vm.showPhone=true;
                 }
 
             });
+
+
+        },
+        created() {
+            this.mounted();
         }
     }
 </script>
