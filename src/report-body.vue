@@ -9,13 +9,13 @@
 
                 <div class="row">
                     <div class="col-6 ml-2 form-group">
-                        <input type="text" name="bday" class="input-name-user input-name-date" placeholder="از تاریخ"
-                               onfocus="changeToDateTypeFrom()" id="from-date">
+                        <input type="text" class="input-name-user input-name-date" placeholder="از تاریخ"
+                               onfocus="changeToDateTypeFrom()" id="from-date" v-model="fromDate">
                     </div>
 
                     <div class="col-5 ml-2 form-group">
-                        <input type="text" name="bday" class="input-name-user input-name-date" placeholder="تا تاریخ"
-                               onfocus="changeToDateTypeTo()" id="to-date">
+                        <input type="text" class="input-name-user input-name-date" placeholder="تا تاریخ"
+                               onfocus="changeToDateTypeTo()" id="to-date" v-model="toDate">
                     </div>
                 </div>
 
@@ -46,7 +46,9 @@
         name: 'edit-prof',
         data() {
             return {
-                reports: []
+                reports: [],
+                fromDate:'',
+                toDate:''
             }
         },
         created: function () {
@@ -54,6 +56,10 @@
         },
         methods:{
             filter(){
+                console.log(this.fromDate);
+                console.log(typeof this.fromDate);
+                console.log(this.toDate);
+                console.log(typeof this.toDate);
                 var ctx = document.getElementById('myChart').getContext('2d');
                 var chart = new Chart(ctx, {
                     // The type of chart we want to create
