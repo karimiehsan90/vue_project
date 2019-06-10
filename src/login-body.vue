@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div>
     <div class="row" style="margin-top: 100px">
         <div class="col-lg-3"></div>
@@ -156,7 +156,7 @@
                         vm.showCode=false;
                         vm.fcode='';
                         vm.fphone='';
-                        setTimeout(function(){$('#forgetModal').modal('toggle'); }, 3000);
+                        setTimeout(function(){$('#forgetModal').modal('hide'); }, 3000);
                     }
                     vm.msgCol=data.success;
                     vm.msg=data.message;
@@ -180,9 +180,6 @@
             });
 
 
-        },
-        created() {
-            this.mounted();
         }
     }
 </script>
