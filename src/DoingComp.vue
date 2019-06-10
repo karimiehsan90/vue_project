@@ -17,7 +17,7 @@
 
     export default {
         name: 'sign-up',
-        props:['caseId'],
+        props:['caseId', 'title', 'body', 'file'],
         components: {
             'header-reg': header,
             's-nav': sidenav,
@@ -29,7 +29,7 @@
             return {
                 page: 'my-cases',
                 role: localStorage.getItem("role"),
-                id:-1
+                id:-1,
             }
         },
         mounted() {

@@ -3,12 +3,15 @@
        style="font-family: IranSans" >
     <div class="font-title1">
       <img src="./img/case.png" class="">
-      موضوع
+{{$parent.title}}
     </div>
 
     <div class="font-explain">
       <img src="./img/explaination.png" class="">
-      شرح
+{{$parent.body}}
+    </div>
+    <div v-if="$parent.file != null" class="font-explain">
+      <a :href="$parent.file" target="_blank">دانلود پیوست</a>
     </div>
 <form @submit.prevent="onSubmit">
     <div class="row">
@@ -27,7 +30,21 @@
         <label id="closed-select" class="container-doing checkmark-text">
           <img src="./img/closed.png" class="">
           <span style="margin: 80px">بسته</span>
-          <input type="radio" name="radio" onclick="closeTextField()" value="1" v-model="status">
+          <input type="radio" name="radio" onclick="closeTextField()" @click="setInvalidTo" value="1" v-model="status">
+          <span class="checkmark"></span>
+        </label>
+
+        <label id="postponed-select" class="container-doing checkmark-text">
+          <img src="./img/closed.png" class="">
+          <span style="margin: 80px">نگهداشتن</span>
+          <input type="radio" name="radio" onclick="closeTextField()" @click="setInvalidTo" value="3" v-model="status">
+          <span class="checkmark"></span>
+        </label>
+
+        <label id="in-queue-select" class="container-doing checkmark-text">
+          <img src="./img/closed.png" class="">
+          <span style="margin: 80px">انتظار</span>
+          <input type="radio" name="radio" onclick="closeTextField()" @click="setInvalidTo" value="2" v-model="status">
           <span class="checkmark"></span>
         </label>
 
@@ -36,7 +53,7 @@
           <img src="./img/ref.png" class="" style="width: 23px">
           <span style="margin: 80px">
             ارجاع</span>
-          <input type="radio" name="radio" value="2" v-model="status">
+          <input type="radio" name="radio" value="0" v-model="status">
           <span class="checkmark"></span>
         </label>
       </div>
@@ -45,15 +62,10 @@
         <div style="display: none" id="select-user">
           <div style="display: inline-block; float: left;">
             <div class="">
-              <input type="text" id="input-name-ref" class="input-name-user" placeholder="نام کاربری">
+              <select class="input-name-user" v-model="to">
+                <option v-for="t in possibles" :value="t.id">{{t.name}}</option>
+              </select>
             </div>
-          </div>
-
-          <div style="display: inline-block; float: left;">
-            <select onchange="myFunction(this) " class="input-name-user selection-style">
-              <option>استاد</option>
-              <option>سایرین</option>
-            </select>
           </div>
         </div>
       </div>
@@ -79,30 +91,60 @@
       return {
         content: '',
         status: '',
-        to:-9
+        to:-9,
+          possibles: []
       }
     },
     methods:{
       onSubmit(){
         var vm = this;
         var tkn = localStorage.getItem("token");
-        $.post('/ticketing/rest/action/set', {
-          token: tkn,
-          case_id:vm.$parent.id,
-          content:vm.content,
-          status:parseInt(vm.status)
-        }, function (data) {
-            if (data.success){
-              vm.content="";
-              vm.status=-1;
-              alert(data.message)
-            }
-        })
-      }
+          var formData = new FormData();
+          formData.append('content', vm.content);
+          formData.append('case_id', vm.$parent.caseId);
+          formData.append('status', vm.status);
+          formData.append('token', tkn);
+          if (vm.to > 0){
+              formData.append('to', vm.to);
+          }
+          $.ajax({
+              url: '/ticketing/rest/action/set',
+              data: formData,
+              cache: false,
+              contentType: false,
+              processData: false,
+              method: 'POST',
+              type: 'POST',
+              success: function (data) {
+                  if(data.success){
+                      vm.content = '';
+                      vm.to = -1;
+                      vm.status = '';
+                      alert(data.message);
+                  }
+                  else {
+                      alert(data.message);
+                  }
+              }
+          });
+      },
+        setInvalidTo(){
+            this.to = -1;
+        }
 
     },
-    created: function () {
-
+    mounted: function () {
+        var vm = this;
+        $.post('/ticketing/rest/auth/list', {
+            token: localStorage.getItem("token")
+        }, function (data) {
+            if (data.success){
+                vm.possibles = data.data;
+            }
+            else {
+                alert(data.message);
+            }
+        })
     }
 
   }

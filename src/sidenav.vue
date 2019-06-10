@@ -109,8 +109,6 @@
         },
         methods: {
             logoutFunction(){
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut();
                 localStorage.removeItem("token");
                 localStorage.removeItem("role");
                 this.$router.push('/')

@@ -81,6 +81,8 @@
                     token: idToken
                 }).done(function (data) {
                     if (data.success){
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut();
                         localStorage.setItem("token", data.data.token);
                         localStorage.setItem("role", data.data.role);
                         localStorage.setItem("name", data.data.name);
