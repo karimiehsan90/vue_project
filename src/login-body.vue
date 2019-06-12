@@ -87,7 +87,7 @@
 
 <script>
 //    import gapi from 'vue-google-oauth2'
-    import $ from 'jquery'
+    import jq from 'jquery'
     export default {
         name: 'login-body',
 
@@ -181,15 +181,16 @@
         },
         mounted: function() {
             var vm = this;
-            $('#forgetModal').on('show.bs.modal', function (event) {
-                console.log(vm.showCode);
-                console.log(vm.showPhone);
-                if (!vm.showCode) {
-                    vm.msg = '';
-                    vm.fphone = '';
-                    vm.showPhone = true;
-                }
-
+            jq(document).ready(function () {
+                $('#forgetModal').on('show.bs.modal', function (event) {
+                    console.log(vm.showCode);
+                    console.log(vm.showPhone);
+                    if (!vm.showCode) {
+                        vm.msg = '';
+                        vm.fphone = '';
+                        vm.showPhone = true;
+                    }
+                });
             });
         }
     }

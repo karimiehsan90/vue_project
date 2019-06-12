@@ -239,7 +239,7 @@
 <script>
     import Excel from 'xlsx'
     import CSV from 'vue-json-to-csv'
-    import $ from 'jquery'
+    import jq from 'jquery'
 
     export default {
         name: 'edit-prof',
@@ -434,7 +434,7 @@
         mounted: function() {
             var vm = this ;
             var tkn = localStorage.getItem("token");
-            $.post('/ticketing/rest/user/manage', {
+            jq.post('/ticketing/rest/user/manage', {
                 token: tkn
             }, function (data) {
                 if (data.success) {
@@ -444,27 +444,30 @@
                 else {
                     show_alert(data.message, true);
                 }
-            })
-            $('#regModal').on('show.bs.modal', function (event) {
-                vm.email = '';
-                vm.password = '';
-                vm.r_pass = '';
-                vm.phone = '';
-                vm.name = '';
-                vm.role='';
             });
-            $('#editUser').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var recipient = button.data('whatever');
-                var neii = recipient.split("/#/");
-                vm.email = neii[1];
-                vm.password = '';
-                vm.perv_pass = '';
-                vm.phone = '';
-                vm.name = neii[0];
-                vm.userToken=neii[2];
-                vm.ind=parseInt(neii[3]);
+            jq(document).ready(function () {
+                $('#regModal').on('show.bs.modal', function (event) {
+                    vm.email = '';
+                    vm.password = '';
+                    vm.r_pass = '';
+                    vm.phone = '';
+                    vm.name = '';
+                    vm.role='';
+                });
+                $('#editUser').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    var recipient = button.data('whatever');
+                    var neii = recipient.split("/#/");
+                    vm.email = neii[1];
+                    vm.password = '';
+                    vm.perv_pass = '';
+                    vm.phone = '';
+                    vm.name = neii[0];
+                    vm.userToken=neii[2];
+                    vm.ind=parseInt(neii[3]);
+                });
             });
+
 
         }
     }
