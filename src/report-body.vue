@@ -8,13 +8,12 @@
 
 
                 <div class="row">
-                    <div class="col-6 ml-2 form-group">
-                        <input type="text" class="input-name-user input-name-date" placeholder="از تاریخ"
+                    <div class="col-sm-6 ml-2 form-group">
+                        <input type="text" class="input-name-user input-name-date form-control form-control-sm" placeholder="از تاریخ"
                                onfocus="changeToDateTypeFrom()" id="from-date" v-model="fromDate">
                     </div>
-
-                    <div class="col-5 ml-2 form-group">
-                        <input type="text" class="input-name-user input-name-date" placeholder="تا تاریخ"
+                    <div class="col-sm-5 ml-2 form-group">
+                        <input type="text" class="input-name-user input-name-date form-control form-control-sm" placeholder="تا تاریخ"
                                onfocus="changeToDateTypeTo()" id="to-date" v-model="toDate">
                     </div>
                 </div>
