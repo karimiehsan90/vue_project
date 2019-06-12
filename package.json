@@ -10,7 +10,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "jquery": "^3.4.0",
+    "jquery": "^3.4.1",
     "vue": "^2.5.11",
     "vue-jquery": "^1.0.6",
     "vue-json-to-csv": "^1.1.7",
