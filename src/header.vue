@@ -28,7 +28,7 @@
                     </a>
                 </div>
                 <div class="col-8">
-                    <ul class="d-flex justify-content-end " style="height: 100%">
+                    <ul class="d-flex justify-content-end " style="height: 100%" v-if="showHeader">
                         <router-link :to="'/'">
                         <li class="p-2 nav-item-1 cursor-pointer" id="item1" @click="logout">خروج</li>
                         </router-link>
@@ -42,13 +42,15 @@
 
 <script>
 //    import router from './router'
+    import $ from 'jquery'
 
     export default {
         name: 'header',
 
         data() {
             return {
-                msg: 'Welcome to Your Vue.js App'
+                msg: 'Welcome to Your Vue.js App',
+                showHeader: true
             }
         },
         methods: {
@@ -60,6 +62,9 @@
             openSide(){
                 $(".side-nav").removeClass("d-none");
             }
+        },
+        mounted: function () {
+            this.showHeader = (localStorage.getItem("token") != null)
         }
     }
 

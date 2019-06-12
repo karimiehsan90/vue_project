@@ -239,6 +239,7 @@
 <script>
     import Excel from 'xlsx'
     import CSV from 'vue-json-to-csv'
+    import $ from 'jquery'
 
     export default {
         name: 'edit-prof',
@@ -312,7 +313,8 @@
                             role: "استاد",
                             email: t.email,
                             name: t.name,
-                            id: t.id
+                            id: t.id,
+                            is_active: true
                         });
                     }
                 })
@@ -429,8 +431,8 @@
             }
 
         },
-        created: function () {
-            var vm = this;
+        mounted: function() {
+            var vm = this ;
             var tkn = localStorage.getItem("token");
             $.post('/ticketing/rest/user/manage', {
                 token: tkn
@@ -443,9 +445,6 @@
                     alert(data.message);
                 }
             })
-        },
-        mounted() {
-            var vm = this ;
             $('#regModal').on('show.bs.modal', function (event) {
                 vm.email = '';
                 vm.password = '';

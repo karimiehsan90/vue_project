@@ -78,7 +78,7 @@
 </template>
 
 <script>
-
+    import $ from 'jquery'
 
     export default {
         name: 'sign-up-body',

@@ -62,6 +62,7 @@
 </template>
 
 <script>
+    import $ from 'jquery'
     export default {
         name: 'edit-prof',
         data() {
@@ -77,7 +78,7 @@
               console.log(this.$parent.role)
           }
         },
-        created: function(){
+        mounted: function(){
             var vm = this;
             var tkn = localStorage.getItem("token");
             $.post('/ticketing/rest/case/getCaseToMe', {

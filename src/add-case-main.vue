@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import $ from 'jquery'
     export default {
         name: 'add-case-main',
         data() {
@@ -98,7 +99,7 @@
                 this.file = this.$refs.file.files[0];
             }
         },
-        created: function () {
+        mounted: function () {
             var vm = this;
             $.post('/ticketing/rest/auth/list', {
                 token: localStorage.getItem("token")

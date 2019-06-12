@@ -30,20 +30,10 @@
                                 ورود
                             </button>
                         </div>
-
-
-                        <!--<button type="button" class="btn-register" style="background-color: var(&#45;&#45;stone);">
-                            ورود با حساب کاربری گوگل</button>-->
-                        <!--<div class="row w-100 mt-3">
-                            <div id="google-login" class="g-signin2 btn-register google-login"
-                                 data-onsuccess="onSignIn(googleUser)">
-                                ورود با حساب کاربری گوگل
-                            </div>
-                        </div>-->
                         <div class="row w-100 mt-3">
                             <div id="customBtn" class="customGPlusSignIn btn-register">
                                 <!--<span class="fa fa-google-plus-g"></span>-->
-                                <span class="buttonText">ورود با حساب کاربری گوگل</span>
+                                <span class="buttonText" @click="onSignIn">ورود با حساب کاربری گوگل</span>
                             </div>
                         </div>
                         <br>
@@ -96,6 +86,8 @@
 </template>
 
 <script>
+//    import gapi from 'vue-google-oauth2'
+    import $ from 'jquery'
     export default {
         name: 'login-body',
 
@@ -130,28 +122,28 @@
                     }
                 });
             },
-            onSignIn(googleUser) {
-                var vm = this;
-                var idToken = googleUser.getAuthResponse().id_token;
-                $.post('/ticketing/rest/auth/google', {
-                    token: idToken
-                }).done(function (data) {
-                    if (data.success) {
-                        var auth2 = gapi.auth2.getAuthInstance();
+            onSignIn() {
+                var auth2 = this.$gAuth;
+                auth2.signIn().then(GoogleUser => {
+                    var idToken = GoogleUser.getAuthResponse().id_token;
+                    var vm = this;
+                    $.post('/ticketing/rest/auth/google', {
+                        token: idToken
+                    }).done(function (data) {
+                        if (data.success) {
+                            auth2.signOut();
+                            localStorage.setItem("token", data.data.token);
+                            localStorage.setItem("role", data.data.role);
+                            localStorage.setItem("name", data.data.name);
+                            vm.$router.push('/');
+                        }
+                        else {
+                            auth2.signOut();
+                        }
+                    }).fail(function () {
                         auth2.signOut();
-                        localStorage.setItem("token", data.data.token);
-                        localStorage.setItem("role", data.data.role);
-                        localStorage.setItem("name", data.data.name);
-                        vm.$router.push('/');
-                    }
-                    else {
-                        var auth2 = gapi.auth2.getAuthInstance();
-                        auth2.signOut();
-                    }
-                }).fail(function () {
-                    var auth2 = gapi.auth2.getAuthInstance();
-                    auth2.signOut();
-                    alert('مشکلی دربرقراری ارتباط سرور با گوگل رخ داده است! لطفا فیلترشکن سرور را روشن نمایید')
+                        alert('مشکلی دربرقراری ارتباط سرور با گوگل رخ داده است! لطفا فیلترشکن سرور را روشن نمایید')
+                    });
                 });
             },
             sendSMS() {
@@ -186,32 +178,9 @@
                     vm.msg = data.message;
                 });
             },
-            attachSignin(element, auth2) {
-                var vm = this;
-                console.log(element.id);
-                auth2.attachClickHandler(element, {},
-                    function(googleUser) {
-                        vm.onSignIn(googleUser);
-                    }, function(error) {
-                        alert(JSON.stringify(error, undefined, 2));
-                    });
-            }
         },
-        mounted() {
+        mounted: function() {
             var vm = this;
-            var startApp = function () {
-                gapi.load('auth2', function () {
-                    // Retrieve the singleton for the GoogleAuth library and set up the client.
-                    var auth2 = gapi.auth2.init({
-                        client_id: '689217686363-o57mhgp17553uibqed439j0u2mk3sc54.apps.googleusercontent.com',
-                        cookiepolicy: 'single_host_origin',
-                        // Request scopes in addition to 'profile' and 'email'
-                        //scope: 'additional_scope'
-                    });
-                    vm.attachSignin(document.getElementById('customBtn'), auth2);
-                });
-            };
-            startApp();
             $('#forgetModal').on('show.bs.modal', function (event) {
                 console.log(vm.showCode);
                 console.log(vm.showPhone);
@@ -222,55 +191,17 @@
                 }
 
             });
-
-
         }
     }
 </script>
 
 <style scoped>
-    #google-login {
-        display: block;
-        /*box-sizing: ;*/
-        background-color: var(--stone);
-    }
-
     #customBtn {
         background-color: var(--stone);
-        display: inline-block;
-        border-radius: 5px;
-        border: thin solid #888;
-        box-shadow: 1px 1px 1px grey;
-        white-space: nowrap;
         color: white;
     }
 
     #customBtn:hover {
         cursor: pointer;
-    }
-
-    span.label {
-        font-family: serif;
-        font-weight: normal;
-    }
-
-    span.icon {
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    span.buttonText {
-        display: inline-block;
-        vertical-align: middle;
-        padding-left: 42px;
-        padding-right: 42px;
-        font-size: 14px;
-        font-weight: bold;
-        /* Use the Roboto font that is loaded in the <head> */
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .fa-google {
-        color: white;
     }
 </style>

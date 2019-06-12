@@ -95,6 +95,7 @@
 
 <script>
 //    import jsPDF from 'jspdf'
+    import $ from 'jquery'
 
     export default {
         name: 'sign-up',
@@ -106,7 +107,7 @@
                 users: []
             }
         },
-        created: function () {
+        mounted: function () {
             var vm = this;
             var tkn = localStorage.getItem("token");
             $.post('/ticketing/rest/case/all', {

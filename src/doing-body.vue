@@ -85,6 +85,7 @@
 </template>
 
 <script>
+  import $ from 'jquery'
   export default {
     name: 'edit-prof',
     data() {

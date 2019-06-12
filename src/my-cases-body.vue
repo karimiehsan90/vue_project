@@ -73,6 +73,7 @@
 </template>
 
 <script>
+    import $ from 'jquery'
     export default {
         el:'#mycases',
         name: 'mcb',
@@ -110,7 +111,7 @@
 
             }
         },
-        created: function () {
+        mounted: function () {
             var vm = this;
             var tkn = localStorage.getItem("token");
             $.post('/ticketing/rest/case/getMyCase', {
