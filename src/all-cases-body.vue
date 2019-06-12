@@ -139,7 +139,7 @@
                         vm.cases = data.data;
                     }
                     else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 })
             },

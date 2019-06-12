@@ -87,10 +87,10 @@
                             vm.to1 = '';
                             vm.imp = '';
                             vm.text = '';
-                            alert(data.message);
+                            show_alert(data.message, false);
                         }
                         else {
-                            alert(data.message);
+                            show_alert(data.message, true);
                         }
                     }
                 });
@@ -108,7 +108,7 @@
                     vm.people = data.data;
                 }
                 else {
-                    alert(data.message);
+                    show_alert(data.message, true);
                 }
             })
         }

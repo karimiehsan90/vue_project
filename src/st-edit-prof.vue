@@ -76,10 +76,10 @@
                         vm.perv_pass = '';
                         vm.phone = '';
                         vm.name = '';
-                        alert(data.message);
+                        show_alert(data.message, false);
                     }
                     else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 })
             }

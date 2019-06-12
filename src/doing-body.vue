@@ -121,10 +121,10 @@
                       vm.content = '';
                       vm.to = -1;
                       vm.status = '';
-                      alert(data.message);
+                      show_alert(data.message, false);
                   }
                   else {
-                      alert(data.message);
+                      show_alert(data.message, true);
                   }
               }
           });
@@ -143,7 +143,7 @@
                 vm.possibles = data.data;
             }
             else {
-                alert(data.message);
+                show_alert(data.message, true);
             }
         })
     }

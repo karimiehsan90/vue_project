@@ -369,7 +369,7 @@
                         vm.r_pass='';
                         vm.role=''
                     } else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 });
             },
@@ -396,7 +396,7 @@
                         $('#editUser').modal('hide');
                     }
                     else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 })
             },
@@ -442,7 +442,7 @@
                     vm.accepts = data.data.accepts;
                 }
                 else {
-                    alert(data.message);
+                    show_alert(data.message, true);
                 }
             })
             $('#regModal').on('show.bs.modal', function (event) {

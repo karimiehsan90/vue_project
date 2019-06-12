@@ -118,7 +118,7 @@
                         vm.$router.push('/');//redirect
                     }
                     else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 });
             },
@@ -142,7 +142,7 @@
                         }
                     }).fail(function () {
                         auth2.signOut();
-                        alert('مشکلی دربرقراری ارتباط سرور با گوگل رخ داده است! لطفا فیلترشکن سرور را روشن نمایید')
+                        show_alert('مشکلی دربرقراری ارتباط سرور با گوگل رخ داده است! لطفا فیلترشکن سرور را روشن نمایید', true);
                     });
                 });
             },

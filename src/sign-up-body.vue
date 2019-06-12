@@ -106,7 +106,7 @@
                         vm.$router.push('/sign-in');
                     }
                     else {
-                        alert(data.message);
+                        show_alert(data.message, true);
                     }
                 });
             },
